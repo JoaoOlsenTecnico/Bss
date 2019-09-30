@@ -1,0 +1,21 @@
+{
+    "name": "bsscommerce/module-one-step-checkout",
+    "description": "Bss One Step Checkout Module",
+    "suggest": {
+        "magento/module-cookie": "100.0.*"
+    },
+    "type": "magento2-module",
+    "version": "2.1.2",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Bss\\OneStepCheckout\\": ""
+        }
+    }
+}

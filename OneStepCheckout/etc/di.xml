@@ -17,16 +17,18 @@
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Quote\Model\Quote\Address">
         <plugin name="bss_osc_quote_address"
-            type="Bss\OneStepCheckout\Plugin\Model\Quote\Address" />
+                type="Bss\OneStepCheckout\Plugin\Model\Quote\Address"/>
     </type>
     <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
         <plugin name="bss_osc_additional_data" type="Bss\OneStepCheckout\Plugin\Model\Checkout\CustomerAdditionalData"/>
     </type>
     <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
-        <plugin name="bss_osc_guest_additional_data" type="Bss\OneStepCheckout\Plugin\Model\Checkout\GuestAdditionalData"/>
+        <plugin name="bss_osc_guest_additional_data"
+                type="Bss\OneStepCheckout\Plugin\Model\Checkout\GuestAdditionalData"/>
     </type>
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="bss_osc_add_delivery_extension_attribute"
@@ -36,14 +38,26 @@
     <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
         <arguments>
             <argument name="columns" xsi:type="array">
-                <item name="delivery_date" xsi:type="string">sales_order.delivery_date</item>
+                <item name="shipping_arrival_date" xsi:type="string">sales_order.shipping_arrival_date</item>
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Bss\OneStepCheckout\Api\GiftWrapManagementInterface" type="Bss\OneStepCheckout\Model\GiftWrapManagement" />
+    <preference for="Bss\OneStepCheckout\Api\GiftWrapValidateManagementInterface" type="Bss\OneStepCheckout\Model\GiftWrapValidateManagement" />
     <preference for="Bss\OneStepCheckout\Api\UpdateItemManagementInterface"
-        type="Bss\OneStepCheckout\Model\UpdateItemManagement" />
+                type="Bss\OneStepCheckout\Model\UpdateItemManagement"/>
     <preference for="Bss\OneStepCheckout\Api\GuestUpdateItemManagementInterface"
-        type="Bss\OneStepCheckout\Model\GuestUpdateItemManagement" />
+                type="Bss\OneStepCheckout\Model\GuestUpdateItemManagement"/>
     <preference for="Bss\OneStepCheckout\Api\Data\UpdateItemDetailsInterface"
-        type="Bss\OneStepCheckout\Model\UpdateItemDetails" />
+                type="Bss\OneStepCheckout\Model\UpdateItemDetails"/>
+    <preference for="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout"
+                type="Bss\OneStepCheckout\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout"/>
+    <preference for="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container"
+                type="Bss\OneStepCheckout\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container"/>
+    <type name="Magento\Sales\Model\Order\Invoice">
+        <plugin name="osc_before_capture" type="Bss\OneStepCheckout\Plugin\Model\Order\Invoice"/>
+    </type>
+    <type name="Magento\Paypal\Model\Cart">
+        <plugin name="update_paypal_fee_order" type="Bss\OneStepCheckout\Plugin\UpdateFeeForOrder"/>
+    </type>
 </config>

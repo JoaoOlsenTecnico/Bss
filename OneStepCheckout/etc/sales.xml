@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_OneStepCheckout
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="quote">
+        <group name="totals">
+        	<item name="osc_gift_wrap" instance="Bss\OneStepCheckout\Model\Total\Quote\GiftWrap" sort_order="150" />
+        </group>
+    </section>
+    <section name="order_invoice">
+        <group name="totals">
+            <item name="osc_gift_wrap" instance="Bss\OneStepCheckout\Model\Total\Invoice\GiftWrap" sort_order="160"/>
+        </group>
+    </section>
+    <section name="order_creditmemo">
+        <group name="totals">
+            <item name="osc_gift_wrap" instance="Bss\OneStepCheckout\Model\Total\Creditmemo\GiftWrap" sort_order="160"/>
+        </group>
+    </section>
+</config>

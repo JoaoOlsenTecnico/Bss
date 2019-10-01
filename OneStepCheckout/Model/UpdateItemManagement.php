@@ -33,6 +33,7 @@ use Magento\Framework\Escaper;
  * Class UpdateItemManagement
  *
  * @package Bss\OneStepCheckout\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateItemManagement implements UpdateItemManagementInterface
 {
@@ -67,12 +68,25 @@ class UpdateItemManagement implements UpdateItemManagementInterface
     private $escaper;
 
     /**
+     * @var \Bss\OneStepCheckout\Helper\Config
+     */
+    private $configHelper;
+
+    /**
+     * @var \Bss\OneStepCheckout\Helper\Data
+     */
+    private $dataHelper;
+
+    /**
+     * UpdateItemManagement constructor.
      * @param CartRepositoryInterface $cartRepository
      * @param UpdateItemDetailsInterfaceFactory $updateItemDetails
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param CartTotalRepositoryInterface $cartTotalRepository
      * @param Escaper $escaper
+     * @param \Bss\OneStepCheckout\Helper\Config $configHelper
+     * @param \Bss\OneStepCheckout\Helper\Data $dataHelper
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
@@ -80,7 +94,9 @@ class UpdateItemManagement implements UpdateItemManagementInterface
         ShippingMethodManagementInterface $shippingMethodManagement,
         PaymentMethodManagementInterface $paymentMethodManagement,
         CartTotalRepositoryInterface $cartTotalRepository,
-        Escaper $escaper
+        Escaper $escaper,
+        \Bss\OneStepCheckout\Helper\Config $configHelper,
+        \Bss\OneStepCheckout\Helper\Data $dataHelper
     ) {
         $this->cartRepository = $cartRepository;
         $this->updateItemDetails = $updateItemDetails;
@@ -88,14 +104,26 @@ class UpdateItemManagement implements UpdateItemManagementInterface
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartTotalRepository = $cartTotalRepository;
         $this->escaper = $escaper;
+        $this->configHelper = $configHelper;
+        $this->dataHelper = $dataHelper;
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $cartId
+     * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address
+     * @param int $itemId
+     * @param float $qty
+     * @return \Bss\OneStepCheckout\Api\Data\UpdateItemDetailsInterface
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function update($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address, $itemId, $qty)
-    {
-        $message = '';
+    public function update(
+        $cartId,
+        \Magento\Quote\Api\Data\EstimateAddressInterface $address,
+        $itemId,
+        $qty
+    ) {
         $status = false;
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->cartRepository->getActive($cartId);
@@ -106,6 +134,9 @@ class UpdateItemManagement implements UpdateItemManagementInterface
         if (!$quoteItem) {
             throw new NoSuchEntityException(__('We can\'t find the quote item.'));
         }
+        $storeId = $quote->getStoreId();
+        $giftWrapType = $this->configHelper->getGiftWrap('type', $storeId);
+        $giftWrapFeeConfig = 0;
         try {
             if (!$qty || $qty <= 0) {
                 $quote->removeItem($itemId);
@@ -128,13 +159,33 @@ class UpdateItemManagement implements UpdateItemManagementInterface
                     );
                 }
             }
+            $currentGiftWrapFee = $quote->getOscGiftWrap();
+            $giftWrapFeeConfig = $this->configHelper->getGiftWrapFee($storeId);
+            if ($giftWrapFeeConfig === false || $quote->isVirtual()) {
+                $quote->setBaseOscGiftWrapFeeConfig(null);
+                $quote->setOscGiftWrapFeeConfig(null);
+                $quote->setOscGiftWrapType(null);
+                $quote->setBaseOscGiftWrap(null);
+                $quote->setOscGiftWrap(null);
+            } else {
+                $giftWrapFeeConfigCurrency = $this->configHelper->formatCurrency($giftWrapFeeConfig);
+                $giftWrapFee = $this->dataHelper->getTotalGiftWrapFee($quote, $giftWrapFeeConfig, $giftWrapType);
+                $giftWrapFeeCurrency = $this->configHelper->formatCurrency($giftWrapFee);
+                if ($giftWrapFeeCurrency != $currentGiftWrapFee) {
+                    $quote->setBaseOscGiftWrapFeeConfig($giftWrapFeeConfig);
+                    $quote->setOscGiftWrapFeeConfig($giftWrapFeeConfigCurrency);
+                    $quote->setOscGiftWrapType($giftWrapType);
+                    $quote->setBaseOscGiftWrap($giftWrapFee);
+                    $quote->setOscGiftWrap($giftWrapFeeCurrency);
+                }
+            }
             $this->cartRepository->save($quote);
         } catch (LocalizedException $e) {
             $message = $e->getMessage();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('We can\'t update the item right now.'));
+            $message = $e->getMessage();
         }
-        return $this->getUpdateCartDetails($quote, $address, $cartId, $message, $status);
+        return $this->getUpdateCartDetails($quote, $address, $cartId, $message, $status, $giftWrapType, $giftWrapFeeConfig);
     }
 
     /**
@@ -142,10 +193,13 @@ class UpdateItemManagement implements UpdateItemManagementInterface
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address
      * @param int $quoteId
      * @param string $message
-     * @param bool $status
+     * @param boolean $status
+     * @param int $giftWrapType
+     * @param mixed $giftWrapFeeConfig
      * @return \Bss\OneStepCheckout\Api\Data\UpdateItemDetailsInterface
+     * @throws NoSuchEntityException
      */
-    private function getUpdateCartDetails($quote, $address, $quoteId, $message, $status)
+    private function getUpdateCartDetails($quote, $address, $quoteId, $message, $status, $giftWrapType, $giftWrapFeeConfig)
     {
         $cartDetails = $this->updateItemDetails->create();
         $paymentMethods = $this->paymentMethodManagement->getList($quoteId);
@@ -165,6 +219,13 @@ class UpdateItemManagement implements UpdateItemManagementInterface
         $cartDetails->setMessage($message);
         $cartDetails->setStatus($status);
 
+        if ($quote->isVirtual() || !$giftWrapFeeConfig) {
+            $display = false;
+        } else {
+            $display = true;
+            $cartDetails->setGiftWrapLabel($this->dataHelper->getGiftWrapLabel($giftWrapFeeConfig, $giftWrapType));
+        }
+        $cartDetails->setGiftWrapDisplay($display);
         if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
             $cartDetails->setHasError(true);
         }

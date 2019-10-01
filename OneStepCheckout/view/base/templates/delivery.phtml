@@ -22,7 +22,7 @@
 <?php // @codingStandardsIgnoreFile ?>
 
 <?php
-    $date = $block->getDeliveryDate();
+    $date = $block->getShippingArrivalDate();
     if ($date && $date != '0000-00-00 00:00:00') :
 ?>
     <div id="bss-osc-delivery-date">
@@ -31,7 +31,7 @@
         <span><?php echo $date; ?></span>
     </div>
 <?php endif; ?>
-<?php if ($comment = $block->getDeliveryComment()) : ?>
+<?php if ($comment = $block->getShippingArrivalComments()) : ?>
     <div id="bss-osc-delivery-comment">
         <br/>
         <strong><?= $block->escapeHtml(__('Comment:')) ?></strong>

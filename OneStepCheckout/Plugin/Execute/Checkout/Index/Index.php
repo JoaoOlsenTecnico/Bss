@@ -66,6 +66,8 @@ class Index
      * @param CheckoutIndex $subject
      * @param callable $proceed
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
         CheckoutIndex $subject,

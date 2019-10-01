@@ -41,6 +41,7 @@ use Bss\OneStepCheckout\Helper\Config;
  * Class Index
  *
  * @package Bss\OneStepCheckout\Controller\Index
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Index extends Onepage
 {
@@ -85,6 +86,7 @@ class Index extends Onepage
      * @param Data $checkoutHelper
      * @param SessionModel $checkoutSession
      * @param Config $configHelper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -159,8 +161,9 @@ class Index extends Onepage
         $this->checkoutSession->setCartWasUpdated(false);
         $this->getOnepage()->initCheckout();
         $resultPage = $this->resultPageFactory->create();
-        if ($tilte = $this->configHelper->getGeneral('tilte')) {
-            $resultPage->getConfig()->getTitle()->set($tilte);
+        $title = $this->configHelper->getGeneral('title');
+        if ($title && $title != '') {
+            $resultPage->getConfig()->getTitle()->set($title);
         }
         return $resultPage;
     }

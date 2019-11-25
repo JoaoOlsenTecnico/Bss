@@ -32,10 +32,10 @@ $helper = $this->helper('Bss\OneStepCheckout\Helper\Config');
     <?php endif; ?>
     <?php if ($bgrColor = $helper->getCustomCss('step_bgr_color')) :?>
         .step-title:before, #opc-sidebar .opc-block-summary > .title:before {
-            background-color: #<?= $bgrColor;?> !important;
+            background-color: #<?= $bgrColor;?>;
         }
         input[type="radio"]:checked, input[type="radio"]:checked::after {
-            background: #<?= $bgrColor;?> !important;
+           
         }
     <?php endif; ?>
     <?php if ($helper->getCustomCss('css_code')) :?>

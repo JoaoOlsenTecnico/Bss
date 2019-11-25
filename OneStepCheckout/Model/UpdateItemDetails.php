@@ -123,36 +123,4 @@ class UpdateItemDetails extends AbstractExtensibleModel implements UpdateItemDet
     {
         return $this->setData(self::HAS_ERROR, $error);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getGiftWrapDisplay()
-    {
-        return $this->getData(self::GIFT_WRAP_DISPLAY);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setGiftWrapDisplay($display)
-    {
-        return $this->setData(self::GIFT_WRAP_DISPLAY, $display);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getGiftWrapLabel()
-    {
-        return $this->getData(self::GIFT_WRAP_LABEL);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setGiftWrapLabel($label)
-    {
-        return $this->setData(self::GIFT_WRAP_LABEL, $label);
-    }
 }

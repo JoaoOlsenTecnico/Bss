@@ -24,7 +24,7 @@ namespace Bss\OneStepCheckout\Api\Data;
  */
 interface UpdateItemDetailsInterface
 {
-    /**
+    /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
     const PAYMENT_METHODS = 'payment_methods';
@@ -39,9 +39,7 @@ interface UpdateItemDetailsInterface
 
     const HAS_ERROR = 'has_error';
 
-    const GIFT_WRAP_DISPLAY = 'gift_wrap_display';
-
-    const GIFT_WRAP_LABEL = 'gift_wrap_label';
+    /**#@-*/
 
     /**
      * @return \Magento\Quote\Api\Data\PaymentMethodInterface[]
@@ -108,26 +106,4 @@ interface UpdateItemDetailsInterface
      * @return $this
      */
     public function setHasError($error);
-
-    /**
-     * @return bool
-     */
-    public function getGiftWrapDisplay();
-
-    /**
-     * @param bool $display
-     * @return $this
-     */
-    public function setGiftWrapDisplay($display);
-
-    /**
-     * @return string
-     */
-    public function getGiftWrapLabel();
-
-    /**
-     * @param string $label
-     * @return $this
-     */
-    public function setGiftWrapLabel($label);
 }

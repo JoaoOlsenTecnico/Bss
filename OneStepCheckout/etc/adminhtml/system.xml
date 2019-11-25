@@ -31,16 +31,12 @@
                 <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[Version 2.1.3]]></comment>
+                    <comment><![CDATA[Version 2.1.2]]></comment>
                 </field>
-                <field id="create_new" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Allow Creating Account On Checkout Page</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="tilte" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Title</label>
                 </field>
-                <field id="router_name" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="router_name" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Router Name</label>
                     <comment>
                         <![CDATA[
@@ -48,13 +44,34 @@
                         ]]>
                     </comment>
                 </field>
+                <field id="newsletter_default" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Auto Check Newsletter Sign up Box</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
 
             <group id="display_field" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Fields Display</label>
+                <field id="enable_delivery_date" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Delivery Date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_delivery_comment" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Delivery Comment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="enable_order_comment" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Order Comment</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_subscribe_newsletter" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Subscribe Newsletter</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_gift_message" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Gift Message on Order Level</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>This config is applied only when the corresponding default config is enabled.</comment>
                 </field>
                 <field id="enable_discount_code" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Discount Code</label>
@@ -62,24 +79,12 @@
                 </field>
             </group>
 
-            <group id="newsletter" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Newsletter</label>
-                <field id="enable_subscribe_newsletter" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Show Subscribe Newsletter</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="newsletter_default" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Auto Check Newsletter Sign up Box</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-            </group>
-
-            <group id="auto_complete" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Tracking Address By Google</label>
+            <group id="auto_complete" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Suggesting Address By Google</label>
                 <field id="enable_auto_complete" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Tracking Address By Google</label>
+                    <label>Enable suggesting address by Google</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[If Yes, the extension will pre-fill and auto-complete customer address.]]>
+                    <comment><![CDATA[When you set to Yes, the extension will allow auto completeting customer address.]]>
                     </comment>
                 </field>
                 <field id="google_api_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -95,100 +100,17 @@
                     </comment>
                 </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Tracking Address from Applicable Countries</label>
+                    <label>Suggesting Address from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
                 <field id="specificcountry" translate="label comment" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Tracking Address from Specific Countries</label>
+                    <label>Suggesting Address from Specific Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <comment>The maximum number of selected countries is 5.</comment>
                 </field>
             </group>
 
-            <group id="order_delivery_date" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Order Delivery Date</label>
-                <field id="enable_delivery_date" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Show Delivery Date</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="enable_delivery_comment" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Show Delivery Comment</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="bss_order_delivery_date" translate="label comment" type="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Order Delivery Date</label>
-                    <comment><![CDATA[Install M2 Order Delivery Date to see more premium features of this function.</br><a target="_blank" href="https://bsscommerce.com/magento-2-order-delivery-date-extension.html">View Detail</a>]]></comment>
-                    <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\OrderDeliveryDate</frontend_model>
-                </field>
-            </group>
-
-            <group id="gift_message" translate="label" type="text" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Gift Message</label>
-                <field id="enable_gift_message" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Show Gift Message on Order Level</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>This config is applied only when the corresponding default config is enabled.</comment>
-                </field>
-            </group>
-
-            <group id="gift_wrap" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Gift Wrap</label>
-                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Type</label>
-                    <source_model>Bss\OneStepCheckout\Model\Config\Source\GiftWrapType</source_model>
-                    <depends>
-                        <field id="enable">1</field>
-                    </depends>
-                </field>
-                <field id="fee" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Gift Wrap Fee</label>
-                    <validate>validate-number validate-zero-or-greater</validate>
-                    <comment>If leaved empty, the value is 0 by default.</comment>
-                    <depends>
-                        <field id="enable">1</field>
-                    </depends>
-                </field>
-            </group>
-
-            <group id="additional_add_on" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Additional Add-on</label>
-                <field id="customer_attributes" translate="label comment" type="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Customer Attributes</label>
-                    <comment><![CDATA[Install M2 Customer Attributes to collect customer information on checkout page.</br><a target="_blank" href="https://bsscommerce.com/magento-2-customer-attributes-extension.html">View Detail</a>]]></comment>
-                    <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\CustomerAttributes</frontend_model>
-                </field>
-                <field id="checkout_custom_fields" translate="label comment" type="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Checkout Custom Field</label>
-                    <comment><![CDATA[Install M2 Checkout Custom Field to add new fields for checkout page to collect any information you want.</br><a target="_blank" href="https://bsscommerce.com/magento-2-checkout-custom-field-extension.html">View Detail</a>]]></comment>
-                    <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\CheckoutCustomFields</frontend_model>
-                </field>
-                <!--<field id="bss_store_credit" translate="label comment" type="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Store Credit</label>
-                    <comment><![CDATA[Click <a target="_blank" href="https://bsscommerce.com/magento-2-store-credit-extension.html">here</a> to purchase extension.]]></comment>
-                    <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\StoreCredit</frontend_model>
-                </field>-->
-                <field id="bss_reward_point" translate="label comment" type="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Reward Points</label>
-                    <comment><![CDATA[Install M2 Reward Points to build a loyalty program for your customers.</br><a target="_blank" href="https://bsscommerce.com/magento-2-reward-points-extension.html">View Detail</a>]]></comment>
-                    <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\RewardPoint</frontend_model>
-                </field>
-                <!--<field id="bss_gift_card" translate="label comment" type="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Gift Card</label>
-                    <comment><![CDATA[Click <a target="_blank" href="https://bsscommerce.com/magento-2-gift-card-extension.html">here</a> to purchase extension.]]></comment>
-                    <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\GiftCard</frontend_model>
-                </field>-->
-                <field id="bss_preselect_shipping_payment" translate="label comment" type="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                   <label>Pre-Select Shipping/Payment</label>
-                   <comment><![CDATA[Install M2 Pre-Select Shipping/Payment to speed up your customers' checkout process.</br><a target="_blank" href="https://bsscommerce.com/magento-2-preselect-shipping-payment-extension.html">View Detail</a>]]></comment>
-                   <frontend_model>Bss\OneStepCheckout\Block\Adminhtml\Module\PreSelectShippingPayment</frontend_model>
-               </field>
-            </group>
-
-            <group id="custom_css" translate="label" type="text" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="custom_css" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Style</label>
                 <field id="step_number_color" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Checkout Step Number Color</label>

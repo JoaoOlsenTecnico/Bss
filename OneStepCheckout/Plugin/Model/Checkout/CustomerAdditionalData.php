@@ -21,7 +21,6 @@ namespace Bss\OneStepCheckout\Plugin\Model\Checkout;
 use Bss\OneStepCheckout\Model\AdditionalData;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Bss\OneStepCheckout\Helper\Config;
-use Bss\OneStepCheckout\Helper\Data;
 
 /**
  * Class CustomerAdditionalData
@@ -53,30 +52,21 @@ class CustomerAdditionalData
     private $configHelper;
 
     /**
-     * @var Data
-     */
-    private $dataHelper;
-
-    /**
-     * CustomerAdditionalData constructor.
      * @param AdditionalData $additionalDataModel
      * @param CartRepositoryInterface $cartRepository
-     * @param \Magento\Checkout\Model\SessionFactory $checkoutSession
+     * @param Magento\Checkout\Model\SessionFactory $checkoutSession
      * @param Config $configHelper
-     * @param Data $dataHelper
      */
     public function __construct(
         AdditionalData $additionalDataModel,
         CartRepositoryInterface $cartRepository,
         \Magento\Checkout\Model\SessionFactory $checkoutSession,
-        Config $configHelper,
-        Data $dataHelper
+        Config $configHelper
     ) {
         $this->additionalDataModel = $additionalDataModel;
         $this->cartRepository = $cartRepository;
         $this->checkoutSession = $checkoutSession;
         $this->configHelper = $configHelper;
-        $this->dataHelper = $dataHelper;
     }
 
 
@@ -87,7 +77,6 @@ class CustomerAdditionalData
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
      * @return mixed
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSavePaymentInformationAndPlaceOrder(
         \Magento\Checkout\Api\PaymentInformationManagementInterface $subject,
@@ -106,7 +95,7 @@ class CustomerAdditionalData
                 $this->additionalDataModel->saveComment($orderId, $additionalData);
             }
             if (!empty($additionalData)
-                && $this->configHelper->isNewletterField('enable_subscribe_newsletter')
+                && $this->configHelper->isDisplayField('enable_subscribe_newsletter')
             ) {
                 $this->additionalDataModel->subscriber($orderId, $additionalData);
             }
@@ -117,11 +106,10 @@ class CustomerAdditionalData
 
     /**
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $subject
-     * @param $cartId
+     * @param int $cartId
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
+     * @return mixed
      */
     public function beforeSavePaymentInformation(
         \Magento\Checkout\Api\PaymentInformationManagementInterface $subject,
@@ -136,23 +124,8 @@ class CustomerAdditionalData
             $quote = $this->cartRepository->getActive($cartId);
             $additionalData = $paymentMethod->getExtensionAttributes()->getBssOsc();
             if (!empty($additionalData)) {
-                if (!$this->dataHelper->isModuleInstall('Bss_OrderDeliveryDate')) {
-                    $this->additionalDataModel->saveDelivery($quote, $additionalData);
-                }
-                $onlineMethodList = [
-                    'payflowpro',
-                    'payflow_link',
-                    'payflow_advanced',
-                    'braintree_paypal',
-                    'paypal_express_bml',
-                    'payflow_express_bml',
-                    'payflow_express',
-                    'paypal_express',
-                    'authorizenet_directpost',
-                    'realexpayments_hpp',
-                    'braintree'
-                ];
-                if (in_array($paymentMethod->getMethod(), $onlineMethodList)) {
+                $this->additionalDataModel->saveDelivery($quote, $additionalData);
+                if ($paymentMethod->getMethod() == 'authorizenet_directpost') {
                     $this->checkoutSession->create()->setBssOscAdditionalData($additionalData);
                 }
             }

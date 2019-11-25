@@ -20,12 +20,8 @@ namespace Bss\OneStepCheckout\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order;
 
-/**
- * Class SaveOrderAfterSubmitObserver
- * @package Bss\OneStepCheckout\Observer
- */
 class SaveOrderAfterSubmitObserver implements ObserverInterface
-{
+{   
     /**
      *
      * @var \Magento\Checkout\Model\SessionFactory
@@ -85,9 +81,9 @@ class SaveOrderAfterSubmitObserver implements ObserverInterface
         if (!empty($additionalData) && isset($additionalData['order_comment'])) {
             $this->additionalDataModel->saveComment($order->getId(), $additionalData);
         }
-
+        
         if (!empty($additionalData)
-            && $this->configHelper->isNewletterField('enable_subscribe_newsletter')
+            && $this->configHelper->isDisplayField('enable_subscribe_newsletter')
         ) {
             $this->additionalDataModel->subscriber($order->getId(), $additionalData);
         }

@@ -1,4 +1,4 @@
-Delivery Date:"One-page checkout is turned off.","One-page checkout is turned off."
+"One-page checkout is turned off.","One-page checkout is turned off."
 "Guest checkout is disabled.","Guest checkout is disabled."
 "This quote does not exist.","This quote does not exist."
 "We can't find the quote item.","We can't find the quote item."
@@ -63,28 +63,3 @@ Title,Title
 "Delivery Comment","Delivery Comment"
 "Order Comment","Order Comment"
 "Check to Subscribe Our Newsletter","Check to Subscribe Our Newsletter"
-"Save in address book","Save in address book"
-"Allow Creating Account On Checkout Page","Allow Creating Account On Checkout Page"
-"Tracking Address By Google","Tracking Address By Google"
-"Enable Tracking Address By Google","Enable Tracking Address By Google",
-"If Yes, the extension will pre-fill and auto-complete customer address.","If Yes, the extension will pre-fill and auto-complete customer address."
-"Tracking Address from Applicable Countries","Tracking Address from Applicable Countries"
-"Tracking Address from Specific Countries","Tracking Address from Specific Countries"
-"Order Delivery Date","Order Delivery Date"
-"Show Delivery Date","Show Delivery Date"
-"Show Delivery Comment","Show Delivery Comment"
-"Gift Message","Gift Message"
-"Show Gift Message on Order Level","Show Gift Message on Order Level"
-"This config is applied only when the corresponding default config is enabled.","This config is applied only when the corresponding default config is enabled."
-"Gift Wrap","Gift Wrap"
-"Gift Wrap Fee","Gift Wrap Fee"
-"Additional Add-on","Additional Add-on"
-"Gift Wrap + %1 per items.","Gift Wrap + %1 per items."
-"Gift Wrap + %1 per order.","Gift Wrap + %1 per order."
-"Gift Wrap update.","Gift Wrap update."
-"Sorry, can not use gift wrap now!","Sorry, can not use gift wrap now!"
-"Error.","Error."
-
-
-
-

@@ -8,15 +8,9 @@ namespace Bss\OneStepCheckout\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
 use Bss\OneStepCheckout\Helper\Config;
-use Bss\OneStepCheckout\Helper\Data;
 
 class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
 {
-    /**
-     * @var Data
-     */
-    private $oscHelper;
-
     /**
      * One step checkout helper
      *
@@ -25,15 +19,13 @@ class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
     private $configHelper;
 
     /**
-     * SalesEventQuoteSubmitBeforeObserver constructor.
-     * @param Data $oscHelper
-     * @param Config $configHelper
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        Data $oscHelper,
         Config $configHelper
     ) {
-        $this->oscHelper = $oscHelper;
         $this->configHelper = $configHelper;
     }
     /**
@@ -44,18 +36,11 @@ class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $quote = $observer->getEvent()->getQuote();
-        $order = $observer->getEvent()->getOrder();
-        if ($this->configHelper->isEnabled() && !$this->oscHelper->isModuleInstall('Bss_OrderDeliveryDate')) {
-            $order->setShippingArrivalDate($quote->getShippingArrivalDate());
-            $order->setShippingArrivalComments($quote->getShippingArrivalComments());
-        }
-        if ($this->configHelper->getGiftWrapFee() !== false) {
-            $order->setBaseOscGiftWrapFeeConfig($quote->getBaseOscGiftWrapFeeConfig());
-            $order->setOscGiftWrapFeeConfig($quote->getOscGiftWrapFeeConfig());
-            $order->setOscGiftWrapType($quote->getOscGiftWrapType());
-            $order->setBaseOscGiftWrap($quote->getBaseOscGiftWrap());
-            $order->setOscGiftWrap($quote->getOscGiftWrap());
+        if ($this->configHelper->isEnabled()) {
+            $quote = $observer->getEvent()->getQuote();
+            $order = $observer->getEvent()->getOrder();
+            $order->setDeliveryDate($quote->getDeliveryDate());
+            $order->setDeliveryComment($quote->getDeliveryComment());
         }
         return $this;
     }

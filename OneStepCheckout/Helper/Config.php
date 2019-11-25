@@ -29,42 +29,18 @@ use Magento\GiftMessage\Helper\Message;
  */
 class Config extends AbstractHelper
 {
-    const ENABLE = 'onestepcheckout/general/enable';
-    const GENERAL_GROUP = 'onestepcheckout/general/';
-    const ENABLE_DISPLAY_FIELD = 'onestepcheckout/display_field/';
-    const NEWLETTER_FIELD = 'onestepcheckout/newsletter/';
-    const ORDER_DELIVERY_FIELD = 'onestepcheckout/order_delivery_date/';
-    const GIFT_MESSAGE_FIELD = 'onestepcheckout/gift_message/';
-    const ENABLE_AUTO_COMPLETE = 'onestepcheckout/auto_complete/enable_auto_complete';
-    const SUGGESTING_ADDRESS = 'onestepcheckout/auto_complete/';
-    const CUSTOM_CSS = 'onestepcheckout/custom_css/';
-    const OSC_CONTROLLER_NAME = 'onestepcheckout';
-    const GIFT_WRAP_FIELD = 'onestepcheckout/gift_wrap/';
+    const ENABLE                      = 'onestepcheckout/general/enable';
+    const GENERAL_GROUP               = 'onestepcheckout/general/';
+    const ENABLE_DISPLAY_FIELD        = 'onestepcheckout/display_field/';
+    const ENABLE_AUTO_COMPLETE        = 'onestepcheckout/auto_complete/enable_auto_complete';
+    const SUGGESTING_ADDRESS          = 'onestepcheckout/auto_complete/';
+    const CUSTOM_CSS                  = 'onestepcheckout/custom_css/';
+    const OSC_CONTROLLER_NAME         = 'onestepcheckout';
 
     /**
-     * @var \Magento\Framework\Pricing\Helper\Data
-     */
-    protected $priceHelper;
-
-    /**
-     * Data constructor.
-     * @param \Magento\Framework\Pricing\Helper\Data $priceHelper
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param ProductMetadataInterface $productMetadata
-     * @param Context $context
-     */
-    public function __construct(
-        \Magento\Framework\Pricing\Helper\Data $priceHelper,
-        \Magento\Framework\App\Helper\Context $context
-    ) {
-        parent::__construct(
-            $context
-        );
-        $this->priceHelper = $priceHelper;
-    }
-
-    /**
-     * @param null $storeId
+     * Is module enabled
+     *
+     * @param null|int $storeId
      * @return bool
      */
     public function isEnabled($storeId = null)
@@ -105,57 +81,6 @@ class Config extends AbstractHelper
         }
         return $this->scopeConfig->isSetFlag(
             self::ENABLE_DISPLAY_FIELD . $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
-     * @param $field
-     * @param null $storeId
-     * @return bool
-     */
-    public function isNewletterField($field, $storeId = null)
-    {
-        if (!$this->isEnabled()) {
-            return false;
-        }
-        return $this->scopeConfig->isSetFlag(
-            self::NEWLETTER_FIELD . $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
-     * @param $field
-     * @param null $storeId
-     * @return bool
-     */
-    public function isOrderDeliveryField($field, $storeId = null)
-    {
-        if (!$this->isEnabled()) {
-            return false;
-        }
-        return $this->scopeConfig->isSetFlag(
-            self::ORDER_DELIVERY_FIELD . $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
-     * @param $field
-     * @param null $storeId
-     * @return bool
-     */
-    public function isGiftMessageField($field, $storeId = null)
-    {
-        if (!$this->isEnabled()) {
-            return false;
-        }
-        return $this->scopeConfig->isSetFlag(
-            self::GIFT_MESSAGE_FIELD . $field,
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
@@ -230,91 +155,5 @@ class Config extends AbstractHelper
             ScopeInterface::SCOPE_STORE,
             $store
         );
-    }
-
-    /**
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getDefaultCustomerGroupId($storeId = null)
-    {
-        return $this->scopeConfig->getValue(
-            'customer/create_account/default_group',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
-     * @param null $storeId
-     * @return bool
-     */
-    public function isAutoCreateNewAccount($storeId = null)
-    {
-        return $this->scopeConfig->isSetFlag(
-            self::GENERAL_GROUP . 'create_new',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
-     * @param null $storeId
-     * @return bool
-     */
-    public function isGiftWrapEnable($storeId = null)
-    {
-        if (!$this->isEnabled()) {
-            return false;
-        }
-        return $this->scopeConfig->isSetFlag(
-            self::GIFT_WRAP_FIELD . 'enable',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
-     * @param $field
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getGiftWrap($field, $storeId = null)
-    {
-        $value = $this->scopeConfig->getValue(
-            self::GIFT_WRAP_FIELD . $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-        if ($field == 'fee') {
-            if ($value == '') {
-                $value = 0;
-            } else {
-                $value = (float)$value;
-                $value = round($value, 2);
-            }
-        }
-        return $value;
-    }
-
-    /**
-     * @return bool|float|mixed
-     */
-    public function getGiftWrapFee()
-    {
-        if (!$this->isGiftWrapEnable()) {
-            return false;
-        }
-        $fee = $this->getGiftWrap('fee');
-        return $fee;
-    }
-
-    /**
-     * @param $number
-     * @return float|string
-     */
-    public function formatCurrency($number)
-    {
-        return $this->priceHelper->currency($number, false, false);
     }
 }

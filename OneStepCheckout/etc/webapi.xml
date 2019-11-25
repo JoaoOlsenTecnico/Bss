@@ -34,16 +34,4 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/bss-osc/giftwrap/apply/:action" method="PUT">
-        <service class="Bss\OneStepCheckout\Api\GiftWrapManagementInterface" method="apply"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-    </route>
-    <route url="/V1/bss-osc/giftwrap/validate/:fee/:use" method="PUT">
-        <service class="Bss\OneStepCheckout\Api\GiftWrapValidateManagementInterface" method="validate"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-    </route>
 </routes>

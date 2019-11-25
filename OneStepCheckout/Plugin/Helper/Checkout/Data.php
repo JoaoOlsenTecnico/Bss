@@ -47,8 +47,6 @@ class Data
      * @param \Magento\Checkout\Helper\Data $subject
      * @param callable $proceed
      * @return bool
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterIsDisplayBillingOnPaymentMethodAvailable(
         \Magento\Checkout\Helper\Data $subject,

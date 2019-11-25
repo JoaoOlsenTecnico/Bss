@@ -15,33 +15,14 @@
  * @copyright Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
  * @license   http://bsscommerce.com/Bss-Commerce-License.txt
  */
-
 namespace Bss\OneStepCheckout\Plugin\Model\Sales;
 
 class OrderRepository
 {
     /**
-     * One step checkout helper
-     *
-     * @var Config
-     */
-    private $dataHelper;
-
-    /**
-     * OrderRepository constructor.
-     * @param \Bss\OneStepCheckout\Helper\Data $dataHelper
-     */
-    public function __construct(
-        \Bss\OneStepCheckout\Helper\Data $dataHelper
-    ) {
-        $this->dataHelper = $dataHelper;
-    }
-
-    /**
      * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
      * @param \Magento\Sales\Api\Data\OrderInterface $entity
      * @return \Magento\Sales\Api\Data\OrderInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGet(
         \Magento\Sales\Api\OrderRepositoryInterface $subject,
@@ -49,10 +30,8 @@ class OrderRepository
     ) {
         $extensionAttributes = $entity->getExtensionAttributes();
         if ($extensionAttributes) {
-            if (!$this->dataHelper->isModuleInstall('Bss_OrderDeliveryDate')) {
-                $extensionAttributes->setShippingArrivalDate($entity->getShippingArrivalDate());
-                $extensionAttributes->setShippingArrivalComments($entity->getShippingArrivalComments());
-            }
+            $extensionAttributes->setDeliveryDate($entity->getDeliveryDate());
+            $extensionAttributes->setDeliveryComment($entity->getDeliveryComment());
             $entity->setExtensionAttributes($extensionAttributes);
         }
         return $entity;

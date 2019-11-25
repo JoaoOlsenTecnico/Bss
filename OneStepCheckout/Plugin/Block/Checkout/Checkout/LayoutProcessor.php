@@ -19,7 +19,6 @@
 namespace Bss\OneStepCheckout\Plugin\Block\Checkout\Checkout;
 
 use Bss\OneStepCheckout\Helper\Config;
-use Bss\OneStepCheckout\Helper\Data;
 
 /**
  * Class LayoutProcessor
@@ -33,34 +32,21 @@ class LayoutProcessor
      *
      * @var Config
      */
-    protected $configHelper;
+    private $configHelper;
 
     /**
-     * @var Data
-     */
-    protected $dataHelper;
-
-    /**
-     * LayoutProcessor constructor.
      * @param Config $configHelper
-     * @param Data $dataHelper
      */
     public function __construct(
-        Config $configHelper,
-        Data $dataHelper
+        Config $configHelper
     ) {
         $this->configHelper = $configHelper;
-        $this->dataHelper = $dataHelper;
     }
 
     /**
      * @param \Magento\Checkout\Block\Checkout\LayoutProcessor $subject
-     * @param array $jsLayout
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterProcess(
         \Magento\Checkout\Block\Checkout\LayoutProcessor $subject,
@@ -70,10 +56,10 @@ class LayoutProcessor
             return $jsLayout;
         }
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
-            ['children']['payment']['children']['afterMethods']['children']['billing-address-form'])) {
+                ['children']['payment']['children']['afterMethods']['children']['billing-address-form'])) {
             $component = $jsLayout['components']['checkout']['children']['steps']['children']
-            ['billing-step']['children']['payment']['children']['afterMethods']['children']
-            ['billing-address-form'];
+                ['billing-step']['children']['payment']['children']['afterMethods']['children']
+                ['billing-address-form'];
             unset(
                 $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
                 ['children']['payment']['children']['afterMethods']['children']['billing-address-form']
@@ -84,7 +70,21 @@ class LayoutProcessor
             ['billing-address-form-shared'] = $component;
         }
 
-        $jsLayout = $this->orderDeliveryDate($jsLayout);
+        if (!$this->configHelper->isDisplayField('enable_delivery_date')) {
+            unset(
+                $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+                ['children']['shippingAddress']['children']['before-shipping-method-form']['children']
+                ['bss_osc_delivery_date']
+            );
+        }
+
+        if (!$this->configHelper->isDisplayField('enable_delivery_comment')) {
+            unset(
+                $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+                ['children']['shippingAddress']['children']['before-shipping-method-form']['children']
+                ['bss_osc_delivery_comment']
+            );
+        }
 
         if (!$this->configHelper->isDisplayField('enable_order_comment')) {
             unset(
@@ -93,9 +93,18 @@ class LayoutProcessor
             );
         }
 
-        $jsLayout = $this->newsletter($jsLayout);
+        if (!$this->configHelper->isDisplayField('enable_subscribe_newsletter')) {
+            unset(
+                $jsLayout['components']['checkout']['children']['sidebar']['children']
+                ['subscribe']
+            );
+        } else {
+            $checked = (bool) $this->configHelper->getGeneral('newsletter_default');
+            $jsLayout['components']['checkout']['children']['sidebar']['children']
+                ['subscribe']['config']['checked'] = $checked;
+        }
 
-        if (!$this->configHelper->isGiftMessageField('enable_gift_message') ||
+        if (!$this->configHelper->isDisplayField('enable_gift_message') ||
             !$this->configHelper->isMessagesAllowed()) {
             unset(
                 $jsLayout['components']['checkout']['children']['sidebar']['children']
@@ -103,52 +112,24 @@ class LayoutProcessor
             );
         }
 
-        if ($this->configHelper->getGiftWrapFee() === false) {
-            unset(
-                $jsLayout['components']['checkout']['children']['sidebar']['children']['gift_wrap']
-            );
+        if ($this->configHelper->isDisplayField('enable_discount_code')) {
+            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount'] =
+                $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
+                ['children']['payment']['children']['afterMethods']['children']['discount'];
+
+            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount']
+            ['displayArea'] = 'summary';
+            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount']
+            ['template'] = 'Bss_OneStepCheckout/payment/discount';
+
+            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount']
+            ['sortOrder'] = 230;
         }
 
-        $jsLayout = $this->discountCode($jsLayout);
-
-        $jsLayout = $this->removeComponent($jsLayout);
-        return $jsLayout;
-    }
-
-    /**
-     * @param $jsLayout
-     * @return mixed
-     */
-    protected function orderDeliveryDate($jsLayout)
-    {
-        if (!$this->configHelper->isOrderDeliveryField('enable_delivery_date') ||
-            $this->dataHelper->isModuleInstall('Bss_OrderDeliveryDate')
-        ) {
-            unset(
-                $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-                ['children']['shippingAddress']['children']['before-shipping-method-form']['children']
-                ['bss_osc_delivery_date']
-            );
+        if (!$this->configHelper->isAutoComplete()) {
+            unset($jsLayout['components']['checkout']['children']['autocomplete']);
         }
-
-        if (!$this->configHelper->isOrderDeliveryField('enable_delivery_comment') ||
-            $this->dataHelper->isModuleInstall('Bss_OrderDeliveryDate')
-        ) {
-            unset(
-                $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-                ['children']['shippingAddress']['children']['before-shipping-method-form']['children']
-                ['bss_osc_delivery_comment']
-            );
-        }
-        return $jsLayout;
-    }
-
-    /**
-     * @param $jsLayout
-     * @return mixed
-     */
-    protected function removeComponent($jsLayout)
-    {
+        
         unset(
             $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
             ['children']['payment']['children']['afterMethods']['children']['discount']
@@ -165,47 +146,6 @@ class LayoutProcessor
         );
 
         unset($jsLayout['components']['checkout']['children']['progressBar']);
-        return $jsLayout;
-    }
-
-    /**
-     * @param $jsLayout
-     * @return mixed
-     */
-    protected function newsletter($jsLayout)
-    {
-        if (!$this->configHelper->isNewletterField('enable_subscribe_newsletter')) {
-            unset(
-                $jsLayout['components']['checkout']['children']['sidebar']['children']
-                ['subscribe']
-            );
-        } else {
-            $checked = (bool)$this->configHelper->isNewletterField('newsletter_default');
-            $jsLayout['components']['checkout']['children']['sidebar']['children']
-            ['subscribe']['config']['checked'] = $checked;
-        }
-        return $jsLayout;
-    }
-
-    /**
-     * @param $jsLayout
-     * @return mixed
-     */
-    protected function discountCode($jsLayout)
-    {
-        if ($this->configHelper->isDisplayField('enable_discount_code')) {
-            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount'] =
-                $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
-                ['children']['payment']['children']['afterMethods']['children']['discount'];
-
-            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount']
-            ['displayArea'] = 'summary';
-            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount']
-            ['template'] = 'Bss_OneStepCheckout/payment/discount';
-
-            $jsLayout['components']['checkout']['children']['sidebar']['children']['discount']
-            ['sortOrder'] = 230;
-        }
         return $jsLayout;
     }
 }

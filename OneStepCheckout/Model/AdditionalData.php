@@ -83,11 +83,11 @@ class AdditionalData
      */
     public function saveDelivery($quote, $additionalData)
     {
-        if (isset($additionalData['delivery_date'])) {
-            $quote->setDeliveryDate($additionalData['delivery_date']);
+        if (isset($additionalData['shipping_arrival_date'])) {
+            $quote->setShippingArrivalDate($additionalData['shipping_arrival_date']);
         }
-        if (isset($additionalData['delivery_comment'])) {
-            $quote->setDeliveryComment($additionalData['delivery_comment']);
+        if (isset($additionalData['shipping_arrival_comments'])) {
+            $quote->setShippingArrivalComments($additionalData['shipping_arrival_comments']);
         }
     }
 

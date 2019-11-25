@@ -68,13 +68,16 @@ class AddDeliveryToOrderShippingViewObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        if ($observer->getElementName() == 'order_shipping_view' && $this->configHelper->isEnabled()) {
+        if ($observer->getElementName() == 'order_shipping_view' &&
+            $this->configHelper->isEnabled() &&
+            !$this->oscHelper->isModuleInstall('Bss_OrderDeliveryDate')
+        ) {
             $orderShippingViewBlock = $observer->getLayout()->getBlock($observer->getElementName());
             $order = $orderShippingViewBlock->getOrder();
             $deliveryBlock = $this->layout->createBlock(\Magento\Framework\View\Element\Template::class);
             $date = $this->oscHelper->formatDateTime($order);
-            $deliveryBlock->setDeliveryDate($date)
-                ->setDeliveryComment($order->getDeliveryComment())
+            $deliveryBlock->setShippingArrivalDate($date)
+                ->setShippingArrivalComments($order->getShippingArrivalComments())
                 ->setActiveJs(true)
                 ->setTemplate('Bss_OneStepCheckout::delivery.phtml');
             $html = $observer->getTransport()->getOutput() . $deliveryBlock->toHtml();

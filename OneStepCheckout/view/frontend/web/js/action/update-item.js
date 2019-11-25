@@ -16,6 +16,7 @@
  */
 
 define([
+    'jquery',
     'underscore',
     'Bss_OneStepCheckout/js/model/url-builder',
     'mage/storage',
@@ -28,8 +29,10 @@ define([
     'Magento_Checkout/js/model/payment/method-converter',
     'Magento_Checkout/js/model/payment-service',
     'Bss_OneStepCheckout/js/model/update-item-service',
-    'Magento_Ui/js/model/messageList'
+    'Magento_Ui/js/model/messageList',
+    'Magento_Checkout/js/action/get-totals'
 ], function (
+    $,
     _,
     urlBuilder,
     storage,
@@ -42,7 +45,8 @@ define([
     methodConverter,
     paymentServiceDefault,
     updateItemService,
-    globalMessageList
+    globalMessageList,
+    getTotalsAction
 ) {
     'use strict';
 
@@ -78,7 +82,13 @@ define([
                     paymentServiceDefault.setPaymentMethods(methodConverter(response.payment_methods));
                     updateItemService.hasUpdateResult(false);
                     response.totals.coupon_code ? paymentService.isAppliedCoupon(true) : paymentService.isAppliedCoupon(false);
-                    
+                    var deferred = $.Deferred();
+                    getTotalsAction([], deferred);
+                    if (!response.gift_wrap_display) {
+                        $('#giftwrap-checkbox').remove();
+                    } else {
+                        $('#giftwrap-checkbox label span').text(response.gift_wrap_label);
+                    }
                 } else {
                     globalMessageList.addErrorMessage(response);
                 }

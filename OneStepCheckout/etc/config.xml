@@ -25,15 +25,22 @@
                 <enable>1</enable>
                 <tilte>One Step Checkout</tilte>
                 <router_name>onestepcheckout.html</router_name>
+                <create_new>1</create_new>
             </general>
             <display_field>
-                <enable_delivery_date>1</enable_delivery_date>
-                <enable_delivery_comment>1</enable_delivery_comment>
                 <enable_order_comment>1</enable_order_comment>
-                <enable_subscribe_newsletter>1</enable_subscribe_newsletter>
-                <enable_gift_message>1</enable_gift_message>
                 <enable_discount_code>1</enable_discount_code>
             </display_field>
+            <newsletter>
+                <enable_subscribe_newsletter>1</enable_subscribe_newsletter>
+            </newsletter>
+            <order_delivery_date>
+                <enable_delivery_date>1</enable_delivery_date>
+                <enable_delivery_comment>1</enable_delivery_comment>
+            </order_delivery_date>
+            <gift_wrap>
+                <enable>0</enable>
+            </gift_wrap>
             <custom_css>
                 <step_number_color>FFFFFF</step_number_color>
                 <step_bgr_color>1979C3</step_bgr_color>

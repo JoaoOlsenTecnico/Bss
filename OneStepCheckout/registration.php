@@ -15,7 +15,8 @@
  * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
-
-use \Magento\Framework\Component\ComponentRegistrar;
-
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Bss_OneStepCheckout', __DIR__);
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    'Bss_OneStepCheckout',
+    __DIR__
+);

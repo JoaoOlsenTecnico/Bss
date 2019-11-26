@@ -49,6 +49,7 @@ class AddDeliveryToOrderShippingBlockObserver implements ObserverInterface
     private $configHelper;
 
     /**
+     * AddDeliveryToOrderShippingBlockObserver constructor.
      * @param LayoutInterface $layout
      * @param Data $oscHelper
      * @param Config $configHelper
@@ -64,20 +65,20 @@ class AddDeliveryToOrderShippingBlockObserver implements ObserverInterface
     }
 
     /**
-     * Execute observer
-     *
      * @param EventObserver $observer
-     * @return void
      */
     public function execute(EventObserver $observer)
     {
-        if ($observer->getElementName() == 'sales.order.info' && $this->configHelper->isEnabled()) {
+        if ($observer->getElementName() == 'sales.order.info' &&
+            $this->configHelper->isEnabled() &&
+            !$this->oscHelper->isModuleInstall('Bss_OrderDeliveryDate')
+        ) {
             $orderShippingViewBlock = $observer->getLayout()->getBlock($observer->getElementName());
             $order = $orderShippingViewBlock->getOrder();
             $deliveryBlock = $this->layout->createBlock(\Magento\Framework\View\Element\Template::class);
             $date = $this->oscHelper->formatDateTime($order);
-            $deliveryBlock->setDeliveryDate($date)
-                ->setDeliveryComment($order->getDeliveryComment())
+            $deliveryBlock->setShippingArrivalDate($date)
+                ->setShippingArrivalComments($order->getShippingArrivalComments())
                 ->setActiveJs(false)
                 ->setTemplate('Bss_OneStepCheckout::delivery.phtml');
             $html = $observer->getTransport()->getOutput() . $deliveryBlock->toHtml();

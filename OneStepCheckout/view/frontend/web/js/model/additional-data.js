@@ -31,10 +31,10 @@ define([
         var subscribe = registry.get('checkout.sidebar.subscribe');
 
         if (!_.isUndefined(deliveryDate)) {
-            additionalData['delivery_date'] = deliveryDate.value();
+            additionalData['shipping_arrival_date'] = deliveryDate.value();
         }
         if (!_.isUndefined(deliveryComment)) {
-            additionalData['delivery_comment'] = deliveryComment.value();
+            additionalData['shipping_arrival_comments'] = deliveryComment.value();
         }
         if (!_.isUndefined(orderComment)) {
             additionalData['order_comment'] = orderComment.value();

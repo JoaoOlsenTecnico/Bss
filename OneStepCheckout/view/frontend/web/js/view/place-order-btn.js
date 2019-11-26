@@ -23,15 +23,13 @@ define([
     'mage/translate',
     'Magento_Checkout/js/model/quote',
     'Bss_OneStepCheckout/js/action/validate-shipping-information',
-    'Bss_OneStepCheckout/js/action/validate-gift-wrap-before-order',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/action/select-billing-address',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Checkout/js/model/shipping-service',
     'underscore',
     'Magento_Ui/js/modal/alert',
-    'Magento_Checkout/js/checkout-data',
-    'Magento_Checkout/js/model/totals'
+    'Magento_Checkout/js/checkout-data'
 ], function (
     ko,
     $,
@@ -40,15 +38,13 @@ define([
     $t,
     quote,
     validateShippingInformationAction,
-    validateGiftWrapAction,
     fullScreenLoader,
     selectBillingAddress,
     additionalValidators,
     shippingService,
     _,
     alert,
-    checkoutData,
-    totals
+    checkoutData
 ) {
     'use strict';
 
@@ -96,14 +92,14 @@ define([
                 }, this);
             }
 
-            if (window.checkoutConfig.magento_version >= "2.3.1" && window.checkoutConfig.paypal_in_context == true) {
+            if (window.checkoutConfig.magento_version >= "2.3.1") {
                 var selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
 
                 if (selectedPaymentMethod == "paypal_express") {
                     self.isVisible(false);
                 }
 
-                $(document).on('change', '.payment-method .radio', function () {
+                $(document).on('change', '.payment-method .radio', function() {
                     if ($('.payment-method._active').find('.actions-toolbar').is('#paypal-express-in-context-button')) {
                         self.isVisible(false);
                     } else {
@@ -135,34 +131,10 @@ define([
                         }
                         validateShippingInformationAction().done(
                             function () {
-                                var action = 0;
-                                if ($('#giftwrap-checkbox input[name="giftwrap"]').is(":checked")) {
-                                    action = 1;
-                                }
-                                var fee = $('.giftwrap .amount .price').attr('amount');
-                                if (typeof fee === "undefined") {
-                                    fee = 0;
-                                }
-                                fee = parseFloat(fee);
-                                if (fee < 0) {
-                                    fee = 0;
-                                }
-                                validateGiftWrapAction(fee, action).done(
-                                    function (response) {
-                                        var res = JSON.parse(response);
-                                        if (res.status == false || res.gift_wrap_update == true || (res.gift_wrap_display == false && $('#giftwrap-checkbox').length)) {
-                                            return;
-                                        }
-                                        var selectedPaymentMethod = checkoutData.getSelectedPaymentMethod();
-                                        if (selectedPaymentMethod == "braintree_paypal") {
-                                            fullScreenLoader.stopLoader();
-                                            totals.isLoading(false);
-                                        }
-                                        $('input#' + self.getCode())
-                                            .closest('.payment-method').find('.payment-method-content .actions-toolbar:not([style*="display: none"]) button.action.checkout')
-                                            .trigger('click');
-                                    }
-                                );
+                                fullScreenLoader.stopLoader();
+                                $('input#' + self.getCode())
+                                    .closest('.payment-method').find('.payment-method-content .actions-toolbar:not([style*="display: none"]) button.action.checkout')
+                                    .trigger('click');
                             }
                         ).fail(
                             function () {
@@ -171,6 +143,11 @@ define([
                         );
                     }
                 }
+            } else {
+                alert({
+                    title: $t('Note'),
+                    content: $t('Please Enter All Required Field.')
+                });
             }
             return false;
         },

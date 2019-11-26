@@ -215,21 +215,18 @@
                     position: relative;
                     top: 3px;
                 }
-                #co-payment-form {
-                    .step-title {
-                        border-bottom: 1px solid #cccccc;
-                        &:before {
-                            content: '3';
-                        }
-                    }
-                    .bss-delivery {
-                        margin-top: 20px;
-                    }
-                }
                 #checkout-payment-method-load {
                     .payment-methods {
                         margin: auto;
                         .payment-group {
+                            &:first-child {
+                                .step-title {
+                                    border-bottom: 1px solid #cccccc;
+                                    &:before {
+                                        content: '3';
+                                    }
+                                }
+                            }
                             &:not(:first-child) {
                                 .step-title {
                                     font-size: 18px;
@@ -318,62 +315,13 @@
                     width: @bss_layout_1_column;
                     > .btn-placeorder {
                         line-height: 2.2rem;
-                        padding: 0px;
+                        padding: 14px 17px;
                         font-size: 1.8rem;
                         margin: 0;
                         width: @bss_layout_1_column;
                     }
                 }
             }
-        }
-
-        .ui_tpicker_hour_slider, .ui_tpicker_minute_slider {
-            width: 100%!important;
-        }
-
-        span {
-            &.qty-button {
-                display: inline-block;
-                text-align: center;
-                vertical-align: middle;
-            }
-
-            &.increase, &.decrease{
-                position: relative;
-                display: block;
-                width: 14px;
-                height: 14px;
-                cursor: pointer;
-
-                &:before {
-                    content: "";
-                    width: 0;
-                    height: 0;
-                    position: absolute;
-                    border: 7px solid transparent;
-                }
-            }
-
-            &.increase {
-                margin-bottom: 4px;
-
-                &:before {
-                    border-bottom: 7px solid #000;
-                }
-            }
-
-            &.decrease {
-                margin-top: 4px;
-
-                &:before {
-                    border-top: 7px solid #000;
-                }
-            }
-        }
-
-        .error-message {
-            color: #e02b27;
-            display: block;
         }
     }
 }
@@ -422,35 +370,6 @@
                 #discount-form {
                     width: @bss_layout_1_column;
                 }
-            }
-        }
-        .create-account {
-            margin-bottom: 0;
-            .pass {
-                float: left;
-                width: 48%;
-                margin-right: 4%;
-                margin-bottom: 0;
-            }
-            .confirm-pass {
-                float: left;
-                width: 48%;
-            }
-        }
-    }
-}
-
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
-    .bss-onestepcheckout {
-        .create-account {
-            .pass {
-                float: none;
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            .confirm-pass {
-                float: none;
-                width: 100%;
             }
         }
     }

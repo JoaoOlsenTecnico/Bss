@@ -47,7 +47,7 @@
                                                                 <!-- address-list-additional-addresses -->
                                                                 <item name="bss_osc_delivery_date" xsi:type="array">
                                                                     <item name="label" xsi:type="string" translate="true">Delivery Date</item>
-                                                                    <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/form/element/date</item>
+                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/date</item>
                                                                     <item name="dataScope" xsi:type="string">before-shipping-method-form.bss_osc_delivery_date</item>
                                                                     <item name="config" xsi:type="array">
                                                                         <item name="template" xsi:type="string">ui/form/field</item>
@@ -78,9 +78,6 @@
                                                     <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/payment</item>
                                                     <item name="template" xsi:type="string">Bss_OneStepCheckout/payment</item>
                                                     <item name="children" xsi:type="array">
-                                                        <item name="customer-email" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/form/element/email</item>
-                                                        </item>
                                                         <item name="payments-list" xsi:type="array">
                                                             <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/payment/list</item>
                                                             <item name="template" xsi:type="string">Bss_OneStepCheckout/payment-methods/list</item>
@@ -90,9 +87,6 @@
                                                                 <item name="agreements-validator" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/agreement-validation</item>
                                                                 </item>
-                                                                <item name="create-new-account-validator" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/create-new-account-validation</item>
-                                                                </item>
                                                             </item>
                                                         </item>
                                                         <item name="afterMethods" xsi:type="array">
@@ -100,22 +94,8 @@
                                                                 <item name="discount" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/payment/discount</item>
                                                                 </item>
-                                                                <item name="osc_widget_under_payment" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/osc-widget</item>
-                                                                    <item name="config" xsi:type="array">
-                                                                        <item name="template" xsi:type="string">Bss_OneStepCheckout/widget/osc-widget-payment</item>
-                                                                    </item>
-                                                                    <item name="sortOrder" xsi:type="string">10</item>
-                                                                </item>
                                                             </item>
                                                         </item>
-                                                        <!--<item name="additional-payment-paypal-validators" xsi:type="array">
-                                                            <item name="children" xsi:type="array">
-                                                                <item name="paypal-validator" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/paypal-validation</item>
-                                                                </item>
-                                                            </item>
-                                                        </item>-->
                                                     </item>
                                                 </item>
                                             </item>
@@ -136,27 +116,7 @@
                                                         </item>
                                                     </item>
                                                 </item>
-                                                <item name="totals" xsi:type="array">
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="gift_wrap" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Bss_OneStepCheckout/js/view/checkout/summary/gift-wrap</item>
-                                                            <item name="sortOrder" xsi:type="string">60</item>
-                                                            <item name="config" xsi:type="array">
-                                                                <item name="template" xsi:type="string">Bss_OneStepCheckout/checkout/summary/gift-wrap</item>
-                                                                <item name="title" xsi:type="string" translate="true">Gift Wrap</item>
-                                                            </item>
-                                                        </item>
-                                                    </item>
-                                                </item>
                                             </item>
-                                        </item>
-                                        <item name="osc_widget_under_summary" xsi:type="array">
-                                            <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/osc-widget</item>
-                                            <item name="config" xsi:type="array">
-                                                <item name="template" xsi:type="string">Bss_OneStepCheckout/widget/osc-widget-summary</item>
-                                            </item>
-                                            <item name="sortOrder" xsi:type="string">210</item>
-                                            <item name="displayArea" xsi:type="string">summary</item>
                                         </item>
                                        <item name="bss_osc_order_comment" xsi:type="array">
                                             <item name="component" xsi:type="string">Magento_Ui/js/form/element/textarea</item>
@@ -180,14 +140,6 @@
                                                     </item>
                                                 </item>
                                             </item>
-                                        </item>
-                                        <item name="gift_wrap" xsi:type="array">
-                                            <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/checkout/use-gift-wrap</item>
-                                            <item name="config" xsi:type="array">
-                                                <item name="template" xsi:type="string">Bss_OneStepCheckout/checkout/use-gift-wrap</item>
-                                            </item>
-                                            <item name="sortOrder" xsi:type="string">245</item>
-                                            <item name="displayArea" xsi:type="string">summary</item>
                                         </item>
                                         <item name="subscribe" xsi:type="array">
                                             <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
@@ -214,14 +166,6 @@
                                             <item name="displayArea" xsi:type="string">summary</item>
                                             <item name="sortOrder" xsi:type="string">270</item>
                                         </item>
-                                        <item name="osc_widget_under_button" xsi:type="array">
-                                            <item name="component" xsi:type="string">Bss_OneStepCheckout/js/view/osc-widget</item>
-                                            <item name="config" xsi:type="array">
-                                                <item name="template" xsi:type="string">Bss_OneStepCheckout/widget/osc-widget-button</item>
-                                            </item>
-                                            <item name="sortOrder" xsi:type="string">280</item>
-                                            <item name="displayArea" xsi:type="string">summary</item>
-                                        </item>
                                     </item>
                                 </item>
                                 <item name="autocomplete" xsi:type="array">
@@ -235,12 +179,10 @@
             </arguments>
         </referenceBlock>
         <referenceContainer name="after.body.start">
-            <block class="Bss\OneStepCheckout\Block\Style" name="bss.osc.style" template="Bss_OneStepCheckout::style.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="bss.osc.style" template="Bss_OneStepCheckout::style.phtml" />
         </referenceContainer>
         <referenceContainer name="sidebar.additional" remove="true"/>
         <referenceBlock name="top.search" remove="true"/>
         <referenceBlock name="minicart" remove="true"/>
-        <referenceContainer name="footer-container" remove="true"/>
-        <referenceBlock name="header.panel.wrapper" remove="true"/>
     </body>
 </page>

@@ -70,7 +70,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping',
-            shippingFormTemplate: 'Bss_OneStepCheckout/shipping-address/form',
+            shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
             shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
             shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
         },
@@ -326,7 +326,7 @@ define([
                 if (customer.isLoggedIn()) {
                     shippingAddress['save_in_address_book'] = 1;
                 }
-                //selectShippingAddress(shippingAddress);
+                selectShippingAddress(shippingAddress);
             }
 
             if (!emailValidationResult) {
@@ -347,132 +347,6 @@ define([
             if (this.source.get('shippingAddress.custom_attributes')) {
                 this.source.trigger('shippingAddress.custom_attributes.data.validate');
             }
-        },
-
-        /**
-         * Auto Fill Address
-         * @param element
-         */
-        autoFillAddress: function (element) {
-            var self = this,
-                formId = element.id;
-            setTimeout(function(){
-                var streetId = $('#' + formId + ' [name="street[0]"]').id;
-                var street = $('#' + formId + ' [name="street[0]"]').val();
-                if (street == '') {
-                    if (typeof window.geoAddress !== "undefined" && window.geoAddress.length !== 0) {
-                        self.fillInAddress(window.geoAddress, streetId);
-                    } else {
-                        self.fillCountry(formId);
-                    }
-                }
-            }, 500);
-        },
-
-        /**
-         * Fill Address
-         * @param address
-         * @param id
-         */
-        fillInAddress: function (address, id) {
-            var componentFields = [
-                'country_id',
-                'postcode',
-                'region_id',
-                'region',
-                'city',
-                'street'
-            ];
-            var country = false,
-                countryList = window.checkoutConfig.bssOsc.googleApiListCountries,
-                useRegionId = false,
-                countryElement = false,
-                regionIdElement = false,
-                component = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
-            registry.get(component, function (formComponent) {
-                $.each(componentFields, function (index, field) {
-                    var element = formComponent.getChild(field);
-                    if (field === 'region') {
-                        element = formComponent.getChild('region_id_input');
-                    }
-
-                    if (field == 'country_id' && field in address) {
-                        $('#' + element.uid).find('option').each(function () {
-                            if ($(this).attr('value') == address[field]) {
-                                var currentCountry = element.value();
-                                element.value(address[field]);
-                                country = address[field];
-                                countryElement = element;
-                                if (($.inArray(currentCountry, countryList) === -1 && $.inArray(address[field], countryList) !== -1) ||
-                                    ($.inArray(currentCountry, countryList) !== -1 && $.inArray(address[field], countryList) !== -1 && currentCountry != address[field])
-                                ) {
-                                    element.trigger('change');
-                                }
-                                return false;
-                            }
-                        });
-                    }
-                    if (field == 'region_id' && field in address && country != false && $.inArray(country, countryList) !== -1) {
-                        $('#' + element.uid).find('option').each(function () {
-                            if ($(this).attr('data-title') == address[field]) {
-                                element.value($(this).attr('value'));
-                                regionIdElement = element;
-                                return false;
-                            }
-                        });
-                        useRegionId = true;
-                    }
-                    if (field == 'region' && country != false && useRegionId == false) {
-                        if ('region_id' in address) {
-                            element.value(address['region_id']);
-                        } else {
-                            element.value('');
-                        }
-                    }
-                    if (field == 'street' && field in address) {
-                        element = formComponent.getChild(field).getChild(0);
-                        element.value(address[field]);
-                    }
-                    if ((field == 'postcode' || field == 'city')) {
-                        if (field in address) {
-                            element.value(address[field]);
-                        } else {
-                            element.value('');
-                        }
-                    }
-                });
-            });
-
-            if (country != '' && component == shipping) {
-                if (useRegionId == true && regionIdElement != false) {
-                    regionIdElement.trigger('change');
-                } else {
-                    if (countryElement != false) {
-                        countryElement.trigger('change');
-                    }
-                }
-            }
-        },
-
-        /**
-         * Fill Country
-         * @param id
-         * @param countryCode
-         */
-        fillCountry: function (formId) {
-            var countryCode = window.checkoutConfig.bssOsc.googleApiCustomerCountry,
-                countrySelector = $('#' + formId + ' [name="country_id"]'),
-                currentCountry = countrySelector.val();
-            if (currentCountry == countryCode) {
-                return;
-            }
-            countrySelector.find('option').each(function () {
-                if ($(this).attr('value') == countryCode) {
-                    countrySelector.val(countryCode);
-                    countrySelector.trigger('change');
-                    return false;
-                }
-            });
         }
     });
 });

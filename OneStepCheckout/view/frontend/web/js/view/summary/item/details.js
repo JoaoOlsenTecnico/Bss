@@ -33,22 +33,12 @@ define([
         },
 
         titleQtyBox: ko.observable($t('Qty')),
-        number: null,
 
         /**
          * @param {Object} item
          * @returns void
          */
         updateQty: function (item) {
-            if (item.qty < 0) {
-                $(".error-message[itemId = '" + item.item_id + "']").text($t('Please enter the number greater than or equal to 0!'));
-                return;
-            }
-            if (parseFloat(item.qty) != item.qty) {
-                $(".error-message[itemId = '" + item.item_id + "']").text($t('Please enter number!'));
-                return;
-            }
-            $(".error-message[itemId = '" + item.item_id + "']").text($t(''));
             updateItemAction(item).done(
                 function (response) {
                     var totals = response.totals,
@@ -60,7 +50,7 @@ define([
                         var originItem = _.find(quoteItemData, function (index) {
                             return index.item_id == itemId;
                         });
-                        $.each(totals.items, function (index) {
+                        $.each(totals.items, function(index) {
                             if (this.item_id == originItem.item_id) {
                                 this.qty = originItem.qty;
                             }
@@ -73,42 +63,6 @@ define([
                     quote.setTotals(totals);
                 }
             );
-        },
-
-        /**
-         * @param data
-         * @param event
-         */
-        updateQtyButton: function (data, event) {
-            var element = event.target,
-                action = element.getAttribute('action'),
-                itemId = element.getAttribute('itemId'),
-                qtyInput = $('[itemId = ' + itemId + ']').parent().parent().find('input');
-            if (typeof action === "undefined" || typeof itemId === "undefined" || typeof qtyInput === "undefined") {
-                return;
-            }
-            var currentQty = parseFloat(qtyInput.val());
-            currentQty = Math.round(currentQty * 100);
-            if (this.number != null && currentQty >= 100) {
-                clearTimeout(this.number);
-            }
-            if (action == 'increase') {
-                var nextQty = (currentQty + 100)/100;
-                nextQty = +nextQty.toFixed(2);
-                qtyInput.val(nextQty);
-                this.number = setTimeout(function () {
-                    qtyInput.trigger('change');
-                }, 1000);
-            } else {
-                if (currentQty >= 100) {
-                    var nextQty = (currentQty - 100)/100;
-                    nextQty = +nextQty.toFixed(2);
-                    qtyInput.val(nextQty);
-                    this.number = setTimeout(function () {
-                        qtyInput.trigger('change');
-                    }, 1000);
-                }
-            }
         },
 
         /**

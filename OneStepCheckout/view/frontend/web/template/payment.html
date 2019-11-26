@@ -30,7 +30,9 @@
         <form id="co-payment-form" class="form payments" novalidate="novalidate">
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
-                <div class="step-title" data-bind="i18n: 'Payment Method'"></div>
+                <legend class="legend">
+                    <span data-bind="i18n: 'Payment Information'"></span>
+                </legend>
                 <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->

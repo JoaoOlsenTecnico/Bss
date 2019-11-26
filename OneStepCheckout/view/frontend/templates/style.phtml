@@ -21,21 +21,24 @@
 
 <?php // @codingStandardsIgnoreFile ?>
 
+<?php
+$helper = $this->helper('Bss\OneStepCheckout\Helper\Config');
+?>
 <style type="text/css">
-    <?php if ($numberColor = $block->getCustomCss('step_number_color')) :?>
+    <?php if ($numberColor = $helper->getCustomCss('step_number_color')) :?>
         .step-title:before, #opc-sidebar .opc-block-summary > .title:before {
             color: #<?= $numberColor;?> !important;
         }
     <?php endif; ?>
-    <?php if ($bgrColor = $block->getCustomCss('step_bgr_color')) :?>
+    <?php if ($bgrColor = $helper->getCustomCss('step_bgr_color')) :?>
         .step-title:before, #opc-sidebar .opc-block-summary > .title:before {
-            background-color: #<?= $bgrColor;?>;
+            background-color: #<?= $bgrColor;?> !important;
         }
         input[type="radio"]:checked, input[type="radio"]:checked::after {
-           
+            background: #<?= $bgrColor;?> !important;
         }
     <?php endif; ?>
-    <?php if ($block->getCustomCss('css_code')) :?>
-        <?= $block->getCustomCss('css_code');?>
+    <?php if ($helper->getCustomCss('css_code')) :?>
+        <?= $helper->getCustomCss('css_code');?>
     <?php endif; ?>
 </style>

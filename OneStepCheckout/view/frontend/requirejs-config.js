@@ -17,9 +17,6 @@ var config = {
             'Magento_Checkout/js/action/set-payment-information': {
                 'Magento_CheckoutAgreements/js/model/set-payment-information-mixin': false,
                 'Bss_OneStepCheckout/js/model/set-payment-information-mixin': true
-            },
-            'Magento_Checkout/js/model/shipping-rates-validation-rules': {
-                'Bss_OneStepCheckout/js/model/shipping-rates-validation-rules-mixin': true
             }
         }
     }

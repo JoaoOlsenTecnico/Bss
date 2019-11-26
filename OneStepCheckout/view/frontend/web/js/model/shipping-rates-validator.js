@@ -74,7 +74,7 @@ define([
             this.bindHandler(element, delay);
             postcodeElement = element;
         }
-    };
+    }
 
     return shippingRatesValidator;
 });
